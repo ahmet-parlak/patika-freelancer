@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 require('dotenv').config();
 
 const pageRouter = require('./routes/pageRoute');
+const projectRouter = require('./routes/projectRoute');
 
 //App
 const app = express();
@@ -36,6 +37,7 @@ app.use(methodOverride('_method', ['GET', 'POST']));
 
 //Routes
 app.use('/', pageRouter);
+app.use('/project', projectRouter);
 
 //Listen
 const port = process.env.PORT ?? 5000;
