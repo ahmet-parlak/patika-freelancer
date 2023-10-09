@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const Project = require('../models/Project');
 const { getValidationErrors } = require('../helpers/validationHelpers');
 
@@ -51,4 +52,23 @@ exports.create = (req, res) => {
   });
 };
 exports.update = (req, res) => {};
-exports.delete = (req, res) => {};
+exports.delete = (req, res) => {
+  const projectId = req.params.id;
+
+  Project.findByIdAndDelete(projectId)
+    .then((project) => {
+      const imgDir = rootDir + '/public/' + project.photo; //Project photo directory
+      if (fs.existsSync(imgDir)) fs.unlinkSync(imgDir); //Delete photo if exists
+
+      return res.status(200).json({
+        status: 'success',
+        message: `Project titled '${project.title}' removed from portfolio.`,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res
+        .status(400)
+        .json({ status: 'error', message: 'Project not found!' });
+    });
+};
