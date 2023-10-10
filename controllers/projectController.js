@@ -2,12 +2,13 @@ const path = require('path');
 const fs = require('fs');
 const Project = require('../models/Project');
 const { getValidationErrors } = require('../helpers/validationHelpers');
+const { generateRandomImageName } = require('../helpers/projectHelpers');
 
 const rootDir = path.dirname(require.main.filename);
 const uploadDir = 'public/assets/img/portfolio';
 const photoDir = '/assets/img/portfolio';
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   const validationErrors = getValidationErrors(req);
 
   if (validationErrors.length > 0)
@@ -18,38 +19,37 @@ exports.create = (req, res) => {
     });
 
   const image = req.files.image;
-  const imageName =
-    (Math.random() + 1).toString(36).substring(7) + '_' + image.name;
-  image.mv(`${rootDir}/${uploadDir}/${imageName}`, (err) => {
-    if (err) {
-      return res.status(500).json({
-        status: 'error',
-        message: 'Something is wrong! Please try again later.',
-      });
-    }
 
-    Project.create({ ...req.body, photo: `${photoDir}/${imageName}` })
-      .then((doc) =>
-        res.status(201).json({
-          status: 'success',
-          message: 'Project successfully added to portfolio.',
-          data: {
-            id: doc._id,
-            title: doc.title,
-            description: doc.description,
-            photo: doc.photo,
-          },
-        })
-      )
-      .catch((err) => {
-        console.log(err);
+  try {
+    const imageName = generateRandomImageName(image.name);
+    const path = `${rootDir}/${uploadDir}/${imageName}`;
 
-        res.status(500).json({
-          status: 'error',
-          message: 'Something is wrong! Please try again later.',
-        });
-      });
-  });
+    await savePhoto(image, path);
+
+    const project = await Project.create({
+      ...req.body,
+      photo: `${photoDir}/${imageName}`,
+    });
+
+    const data = {
+      id: project._id,
+      title: project.title,
+      description: project.description,
+      photo: project.photo,
+    };
+
+    res.status(201).json({
+      status: 'success',
+      message: 'Project successfully added to portfolio.',
+      data: data,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Something is wrong! Please try again later.',
+    });
+  }
 };
 
 exports.update = (req, res) => {
@@ -72,55 +72,43 @@ exports.update = (req, res) => {
       //If photo updated
       if (req.files && Object.keys(req.files).length !== 0) {
         const oldPhotoDir = rootDir + '/public/' + project.photo; //Old photo directory
-        if (fs.existsSync(oldPhotoDir)) fs.unlinkSync(oldPhotoDir); //Remove old photo
+        removePhoto(oldPhotoDir); //Remove old photo
 
         const image = req.files.image;
-        const imageName =
-          (Math.random() + 1).toString(36).substring(7) + '_' + image.name;
+        const imageName = generateRandomImageName(image.name);
         const newPhotoDir = `${rootDir}/${uploadDir}/${imageName}`;
         const newPhotoUrl = `${photoDir}/${imageName}`;
 
-        //Save new image
-        image.mv(newPhotoDir, (err) => {
-          if (err) {
-            return res.status(500).json({
-              status: 'error',
-              message: 'Something is wrong! Please try again later.',
-            });
-          }
-          //update photo & title & description
+        try {
+          savePhoto(image, newPhotoDir);
           project.photo = newPhotoUrl;
-          project.title = title;
-          project.description = description;
-
-          saveProject();
-        });
-      } else {
-        //update just title & description
-        project.title = title;
-        project.description = description;
-        saveProject();
-      }
-
-      function saveProject() {
-        project
-          .save()
-          .then((updatedProject) =>
-            res.status(200).json({
-              status: 'success',
-              message: 'Project updated',
-              data: updatedProject,
-            })
-          )
-          .catch((err) => {
-            console.log(err);
-
-            res.status(500).json({
-              status: 'error',
-              message: 'Something is wrong! Please try again later.',
-            });
+        } catch (error) {
+          return res.status(500).json({
+            status: 'error',
+            message: 'Something is wrong! Please try again later.',
           });
+        }
       }
+      project.title = title;
+      project.description = description;
+
+      project
+        .save()
+        .then((updatedProject) =>
+          res.status(200).json({
+            status: 'success',
+            message: 'Project updated',
+            data: updatedProject,
+          })
+        )
+        .catch((err) => {
+          console.log(err);
+
+          res.status(500).json({
+            status: 'error',
+            message: 'Something is wrong! Please try again later.',
+          });
+        });
     })
     .catch((err) => {
       console.log(err);
@@ -134,8 +122,7 @@ exports.delete = (req, res) => {
   Project.findByIdAndDelete(projectId)
     .then((project) => {
       const imgDir = rootDir + '/public/' + project.photo; //Project photo directory
-      if (fs.existsSync(imgDir)) fs.unlinkSync(imgDir); //Delete photo if exists
-
+      removePhoto(imgDir);
       return res.status(200).json({
         status: 'success',
         message: `Project titled '${project.title}' removed from portfolio.`,
@@ -145,3 +132,17 @@ exports.delete = (req, res) => {
       res.status(400).json({ status: 'error', message: 'Project not found!' })
     );
 };
+
+function savePhoto(image, path) {
+  return new Promise((resolve, reject) => {
+    image.mv(path, (err) => {
+      if (err) reject();
+
+      resolve();
+    });
+  });
+}
+
+function removePhoto(directory) {
+  if (fs.existsSync(directory)) fs.unlinkSync(directory); //Remove photo if exists
+}
