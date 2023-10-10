@@ -8,6 +8,15 @@ const rootDir = path.dirname(require.main.filename);
 const uploadDir = 'public/assets/img/portfolio';
 const photoDir = '/assets/img/portfolio';
 
+exports.getAllProjects = async () => {
+  try {
+    
+    return await Project.find().sort('-created_at');
+  } catch (error) {
+    return [];
+  }
+};
+
 exports.create = async (req, res) => {
   const validationErrors = getValidationErrors(req);
 

@@ -43,6 +43,24 @@
 <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+
+<script>
+  const projects = JSON.parse(`<%- JSON.stringify(projects) %>`);
+  const modalTitle = document.getElementById('modal_title');
+  const modalDescription = document.getElementById('modal_description');
+  const modalImage = document.getElementById('modal_img');
+
+  function showDetails(id) {
+    const project = projects.find(p => p.id === id);
+
+    modalTitle.textContent = project.title;
+    modalDescription.textContent = project.description;
+    modalImage.setAttribute('src', project.photo);
+    modalImage.setAttribute('alt', project.title + 'Image');
+
+  }
+</script>
 </body>
 
 </html>
