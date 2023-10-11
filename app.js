@@ -33,7 +33,7 @@ app.use(
   })
 );
 app.use(fileUpload());
-app.use(methodOverride('_method', ['GET', 'POST']));
+app.use(methodOverride('_method', { methods: ['GET', 'POST'] }));
 
 //Routes
 app.use('/', pageRouter);
