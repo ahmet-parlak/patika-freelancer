@@ -199,7 +199,7 @@
 <div class="portfolio-modal modal fade" id="portfolioEditModal" tabindex="-1" aria-labelledby="portfolioEditModal" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+      <div class="modal-header border-0"><button id="editModalCloseBtn" class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
       <div class="modal-body text-center pb-5">
         <div class="container">
           <div class="row justify-content-center">
@@ -212,13 +212,50 @@
                 <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                 <div class="divider-custom-line"></div>
               </div>
-              <!-- Portfolio Modal - Image-->
-              <img class="img-fluid rounded mb-5" src="" alt="" id="edit_modal_img" />
-              <!-- Portfolio Modal - Text-->
-              <p class="mb-4" id="edit_modal_description"></p>
-              <button class="btn btn-success">
-                Update Project
-              </button>
+              <div class="text-center">
+                <img class="img-fluid rounded mb-2 mx-auto" src="" alt="" id="edit_modal_img" width="240" />
+              </div>
+              <form id="editProjectForm">
+                <!-- Title input-->
+                <div class="form-floating mb-3">
+                  <input class="form-control" id="edit_title_input" type="text" placeholder="Enter project title..." autocomplete="off" data-sb-validations="required" />
+                  <label for="title">Project Title</label>
+                  <div class="invalid-feedback" data-sb-feedback="title:required">A title is required.</div>
+                </div>
+                <!-- Description input-->
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" id="edit_description_input" type="text" placeholder="Enter project description here..." style="height: 10rem"></textarea>
+                  <label for="description">Project Description</label>
+                </div>
+                <!-- Photo input-->
+                <div class="mb-3 text-start">
+                  <label for="title" class="photo-input fs-4 ps-1 pb-2">Project Photo</label>
+                  <input class="form-control" id="edit_photo_input" type="file" placeholder="Select project photo..." data-sb-validations="required" />
+                  <div class="invalid-feedback" data-sb-feedback="title:required">A photo is required.</div>
+                </div>
+                <!-- Submit success message-->
+                <!---->
+                <!-- This is what your users will see when the form-->
+                <!-- has successfully submitted-->
+                <div class="d-none" id="submitSuccessMessage">
+                  <div class="text-center mb-3">
+                    <div class="fw-bolder">Form submission successful!</div>
+                  </div>
+                </div>
+                <!-- Submit error message-->
+                <!---->
+                <!-- This is what your users will see when there is-->
+                <!-- an error submitting the form-->
+                <div class="d-none" id="submitErrorMessage">
+                  <div class="text-center text-danger mb-3">Error sending message!</div>
+                </div>
+                <!-- Submit Button-->
+                <button class="btn btn-primary btn-xl" id="updateButton" type="submit">Update</button>
+
+                <!-- Alerts -->
+                <div id="edit-form-alerts-container" class="form-alerts w-50 mx-auto">
+                </div>
+              </form>
             </div>
           </div>
         </div>

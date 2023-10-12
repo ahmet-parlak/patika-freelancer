@@ -49,6 +49,70 @@ addProjectForm.addEventListener('submit', (event) => {
 });
 
 // ----------------------------------------------
+// EDIT PROJECT
+// ----------------------------------------------
+const editProjectForm = document.getElementById('editProjectForm');
+
+function editModal(id) {
+  const project = projects.find((p) => p.id === id);
+  const editTitleInput = document.getElementById('edit_title_input');
+  const editDescriptionInput = document.getElementById(
+    'edit_description_input'
+  );
+  const editModalImage = document.getElementById('edit_modal_img');
+  editTitleInput.value = project.title;
+  editDescriptionInput.value = project.description;
+  editModalImage.src = project.photo;
+  editProjectForm.setAttribute('project', project.id);
+}
+
+/* Form Submission */
+editProjectForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const editTitleInput = document.getElementById('edit_title_input');
+  const editDescriptionInput = document.getElementById(
+    'edit_description_input'
+  );
+  const editPhotoInput = document.getElementById('edit_photo_input');
+
+  const project = evt.target.getAttribute('project');
+  const title = editTitleInput.value;
+  const description = editDescriptionInput.value;
+  const image = editPhotoInput.files[0];
+
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('image', image);
+
+  fetch(`/project/${project}`, { method: 'PUT', body: formData })
+    .then((response) => {
+      if (response.ok || response.status === 400) return response.json();
+      throw new Error(response.status);
+    })
+    .then((response) => {
+      if (response.status === 'success') {
+        const project = response.data;
+        showAlert(response.message, 'success');
+        updateProjectInPortfolio(project);
+        document.getElementById('editModalCloseBtn').click();
+      } else {
+        if (Array.isArray(response.data)) {
+          response.data.map((error) => {
+            addEditProjectFormAlert(error);
+          });
+        } else {
+          addEditProjectFormAlert(response.message);
+        }
+      }
+    })
+    .catch((err) => {
+      addEditProjectFormAlert(err, 'error');
+    });
+});
+
+// ----------------------------------------------
 // REMOVE PROJECT
 // ----------------------------------------------
 const removeModalClsBtn = document.getElementById('removeModalClsBtn');
@@ -153,6 +217,20 @@ function removeAddProjectFormAlerts() {
   formAlerts.innerHTML = '';
 }
 
+function addEditProjectFormAlert(message) {
+  const formAlerts = document.getElementById('edit-form-alerts-container');
+
+  formAlerts.innerHTML += `<div  class="alert alert-danger d-flex align-items-center mt-4" role="alert">
+  ${message}
+  </div>`;
+}
+
+function removeAddProjectFormAlerts() {
+  const formAlerts = document.getElementById('edit-form-alerts-container');
+
+  formAlerts.innerHTML = '';
+}
+
 function clearAddProjectForm() {}
 
 function getBtnSpinner(text = 'Loading...') {
@@ -190,4 +268,40 @@ function addProjectToPortfolio(project) {
 
   portfolioGridContainer.innerHTML =
     newProject + portfolioGridContainer.innerHTML;
+}
+
+function updateProjectInPortfolio(updatedProject) {
+  let oldProject;
+  projects.forEach((project) => {
+    if (project.id === updatedProject.id) return (oldProject = project);
+  });
+  const project = oldProject;
+  project.title = updatedProject.title;
+  project.description = updatedProject.description;
+  project.photo = updatedProject.photo;
+
+  const portfolioElement = document.querySelector(
+    `[portfolio='${updatedProject.id}']`
+  );
+
+  portfolioElement.innerHTML = `
+  <div class="portfolio-item mx-auto position-relative" data-bs-toggle="modal" data-bs-target="#portfolioModal" onclick="showDetails('${project.id}')">
+  <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+    <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+  </div>
+
+  <!-- Edit Button -->
+  <div class="portfolio-item-caption-content position-absolute bottom-0 end-0 m-1" data-bs-toggle="modal" data-bs-target="#portfolioEditModal" onclick="editModal('${project.id}')">
+    <div class="edit-btn text-warning p-2" title="Edit"><i class="fas fa-pen fa-2x"></i></div>
+  </div>
+
+  <!-- Remove Button -->
+  <div class="portfolio-item-caption-content position-absolute top-0 end-0 m-1" data-bs-toggle="modal" data-bs-target="#portfolioRemoveModal" onclick="remove('${project.id}')">
+    <div class="remove-btn text-danger px-2" title="Remove From Portfolio"><i class="fas fa-times fa-3x"></i></div>
+  </div>
+
+  <img class="img-fluid" src="${project.photo}" alt="${project.title} Image" />
+
+</div>
+`;
 }
