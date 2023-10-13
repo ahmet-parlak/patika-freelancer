@@ -54,6 +54,10 @@ app.use('/', pageRouter);
 app.use('/project', projectRouter);
 app.use('/auth', authRouter);
 
+app.use((req, res) => {
+  res.status(404).render('404');
+});
+
 //Listen
 const port = process.env.PORT ?? 5000;
 app.listen(port, () => console.log(`🚀 The server running at port ${port}`));

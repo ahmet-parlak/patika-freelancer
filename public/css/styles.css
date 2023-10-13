@@ -11044,3 +11044,11 @@ html {
 .copyright {
   background-color: #1a252f;
 }
+
+.link-404{
+  text-decoration: none;
+}
+
+.link-404:hover{
+  text-decoration: underline !important;
+}
