@@ -4,3 +4,5 @@ exports.getIndexPage = async (req, res) => {
   const projects = await getAllProjects();
   res.status(200).render('index', { projects });
 };
+
+exports.getLoginPage = (req, res) => res.status(200).render('login');

@@ -1,0 +1,28 @@
+<header class="masthead bg-primary text-white text-center">
+  <div class="container d-flex align-items-center flex-column">
+    <!-- Masthead Heading-->
+    <h1 class="masthead-heading text-uppercase mb-0">LOGIN</h1>
+    <!-- Icon Divider-->
+    <div class="divider-custom divider-light mb-2">
+      <div class="divider-custom-line"></div>
+      <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+      <div class="divider-custom-line"></div>
+    </div>
+
+    <form class="mt-4" id="loginForm" action="/auth/login" method="POST">
+      <!-- Username input-->
+      <div class="form-floating mb-3">
+        <input class="form-control px-4" id="username" type="text" autocomplete="off" placeholder="Enter your username..." data-sb-validations="required" />
+        <label class="px-2" for="username">Username</label>
+      </div>
+      <!-- Password input-->
+      <div class="form-floating mb-3 ">
+        <input class="form-control px-4" id="password" type="password" placeholder="Enter your password..." data-sb-validations="required" />
+        <label class="px-2" for="password">Password</label>
+      </div>
+
+      <!-- Submit Button-->
+      <button class="btn btn-secondary btn-xl" type="submit">Login</button>
+    </form>
+  </div>
+</header>

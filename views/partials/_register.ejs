@@ -1,0 +1,36 @@
+<header class="masthead bg-primary text-white text-center">
+  <div class="container d-flex align-items-center flex-column">
+    <!-- Masthead Heading-->
+    <h1 class="masthead-heading text-uppercase mb-0">Register</h1>
+    <!-- Icon Divider-->
+    <div class="divider-custom divider-light mb-0">
+      <div class="divider-custom-line"></div>
+      <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+      <div class="divider-custom-line"></div>
+    </div>
+     <!-- Subheading-->
+     <p class="masthead-subheading font-weight-light mb-0">Create a username and password to manage your portfolio</p>
+
+    <form class="mt-2" id="registerForm" action="/user" method="POST">
+      <!-- Username input-->
+      <div class="form-floating mb-3">
+        <input class="form-control px-4" name="username" type="text" autocomplete="off" placeholder="Enter your username..." data-sb-validations="required" />
+        <label class="px-2" for="username">Username</label>
+      </div>
+      <!-- Password input-->
+      <div class="form-floating mb-3">
+        <input class="form-control px-4" name="password" type="password" placeholder="Enter your password..." data-sb-validations="required" />
+        <label class="px-2" for="password">Password</label>
+      </div>
+
+      <!-- Password Confirm input-->
+      <div class="form-floating mb-3 ">
+        <input class="form-control px-4" name="password_confirm" type="password" placeholder="Confirm your password..." data-sb-validations="required" />
+        <label class="px-2" for="password_confirm">Confirm Password</label>
+      </div>
+
+      <!-- Submit Button-->
+      <button class="btn btn-secondary btn-xl" type="submit">Submit</button>
+    </form>
+  </div>
+</header>
