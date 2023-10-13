@@ -88,6 +88,7 @@ editProjectForm.addEventListener('submit', (evt) => {
 
   fetch(`/project/${project}`, { method: 'PUT', body: formData })
     .then((response) => {
+      removeEditProjectFormAlerts();
       if (response.ok || response.status === 400) return response.json();
       throw new Error(response.status);
     })
@@ -225,7 +226,7 @@ function addEditProjectFormAlert(message) {
   </div>`;
 }
 
-function removeAddProjectFormAlerts() {
+function removeEditProjectFormAlerts() {
   const formAlerts = document.getElementById('edit-form-alerts-container');
 
   formAlerts.innerHTML = '';

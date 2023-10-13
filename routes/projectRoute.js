@@ -1,5 +1,6 @@
 const express = require('express');
 const projectController = require('../controllers/projectController');
+const authMiddleware = require('../middlewares/authMiddleware');
 const {
   validateProjectTitle,
   validateProjectDescription,
@@ -7,6 +8,8 @@ const {
 } = require('../middlewares/validators/project');
 
 const router = express.Router();
+
+router.all('*', authMiddleware);
 
 router.post(
   '/',
