@@ -60,6 +60,20 @@
 
 <% } %>
 
+<% if (userIN) {%>
+<script src="/js/panel.js"></script>
+<%} %>
+
+<script>
+  const succNoti = document.getElementById('success-noti');
+
+  if (succNoti) {
+    setTimeout(() => {
+      succNoti.remove();
+    }, 2500)
+  }
+</script>
+
 </body>
 
 </html>

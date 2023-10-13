@@ -9,20 +9,36 @@
       <div class="divider-custom-line"></div>
     </div>
 
+    <!-- Success Message -->
+    <% if(flashMessages.success) {%>
+    <div class="success-message">
+      <div class="alert alert-info mb-3"><%= flashMessages.success %></div>
+    </div>
+    <%}%>
+
     <form class="mt-4" id="loginForm" action="/auth/login" method="POST">
       <!-- Username input-->
       <div class="form-floating mb-3">
-        <input class="form-control px-4" id="username" type="text" autocomplete="off" placeholder="Enter your username..." data-sb-validations="required" />
+        <input class="form-control px-4" name="username" type="text" autocomplete="off" placeholder="Enter your username..." data-sb-validations="required" />
         <label class="px-2" for="username">Username</label>
       </div>
       <!-- Password input-->
       <div class="form-floating mb-3 ">
-        <input class="form-control px-4" id="password" type="password" placeholder="Enter your password..." data-sb-validations="required" />
+        <input class="form-control px-4" name="password" type="password" placeholder="Enter your password..." data-sb-validations="required" />
         <label class="px-2" for="password">Password</label>
       </div>
 
       <!-- Submit Button-->
-      <button class="btn btn-secondary btn-xl" type="submit">Login</button>
+      <button class="btn btn-secondary btn-xl mb-4" type="submit">Login</button>
+
+      <!-- Validation Errors -->
+      <% if(flashMessages.errors) {%>
+    <div class="validation-errors">
+      <% flashMessages.errors.forEach(error => {%>
+      <div class="alert alert-danger mb-3"><%= error %></div>
+      <%}); %>
+    </div>
+    <%}%>
     </form>
   </div>
 </header>

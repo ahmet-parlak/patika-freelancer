@@ -8,7 +8,12 @@
 <%- include('partials/_masthead') %>
 
 <!-- Portfolio Section-->
+<% if (userIN) {%>
+<%- include('partials/_portfolio_management') %>
+<%}else{%>
 <%- include('partials/_portfolio') %>
+<% } %>
+
 
 <!-- About Section-->
 <%- include('partials/_about') %>

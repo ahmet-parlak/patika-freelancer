@@ -8,10 +8,11 @@
       <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
       <div class="divider-custom-line"></div>
     </div>
-     <!-- Subheading-->
-     <p class="masthead-subheading font-weight-light mb-0">Create a username and password to manage your portfolio</p>
+    <!-- Subheading-->
+    <p class="masthead-subheading font-weight-light mb-0">Create a username and password to manage your portfolio</p>
 
-    <form class="mt-2" id="registerForm" action="/user" method="POST">
+    <!-- Form -->
+    <form class="mt-2" id="registerForm" action="/auth/user" method="POST">
       <!-- Username input-->
       <div class="form-floating mb-3">
         <input class="form-control px-4" name="username" type="text" autocomplete="off" placeholder="Enter your username..." data-sb-validations="required" />
@@ -30,7 +31,16 @@
       </div>
 
       <!-- Submit Button-->
-      <button class="btn btn-secondary btn-xl" type="submit">Submit</button>
+      <button class="btn btn-secondary btn-xl mb-4" type="submit">Submit</button>
+
+      <!-- Validation Errors -->
+      <% if(flashMessages.errors) {%>
+      <div class="validation-errors">
+        <% flashMessages.errors.forEach(error => {%>
+        <div class="alert alert-danger mb-3"><%= error %></div>
+        <%}); %>
+      </div>
+      <%}%>
     </form>
   </div>
 </header>

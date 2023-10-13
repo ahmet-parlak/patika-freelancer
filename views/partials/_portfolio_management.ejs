@@ -1,5 +1,14 @@
 <section class="page-section portfolio" id="portfolio">
   <div class="container">
+    <% if (flashMessages.success) {%>
+    <!-- Successs Alert -->
+    <div id="success-noti" class="succses-alert w-50 mx-auto">
+      <div class="alert alert-success text-center">
+        <%= flashMessages.success %>
+      </div>
+    </div>
+    <%} %>
+
     <!-- Portfolio Section Heading-->
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Portfolio Management</h2>
     <!-- Icon Divider-->
