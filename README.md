@@ -1,5 +1,5 @@
 # Patika-Freelancer
-Freelancer is a portfolio site built with **Express** and **MongoDB** and [Freelancer theme](https://startbootstrap.com/theme/freelancer) for [this task](https://academy.patika.dev/courses/nodejs-backend-patikasi-projeleri/Freelancer-Proje) in Patika.dev NodeJS course.
+Freelancer is a portfolio website built with **Express** and **MongoDB** and [Freelancer theme](https://startbootstrap.com/theme/freelancer) for [this task](https://academy.patika.dev/courses/nodejs-backend-patikasi-projeleri/Freelancer-Proje) in Patika.dev NodeJS course.
 
 ## Getting Started
 - Clone this repo: ```git clone https://github.com/ahmet-parlak/patika-freelancer.git```
@@ -20,3 +20,5 @@ After completing these steps, you can manage the portfolio area by logging in at
 - [Connect-flash](https://www.npmjs.com/package/connect-flash)
 
 ## Demo Video
+https://github.com/ahmet-parlak/patika-freelancer/assets/117575634/a389293b-f43c-41fd-abb3-d911ce0bc7cc
+
